@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument name="pageTitle" translate="true" xsi:type="string">Post</argument>
+            </action>
+            <arguments>
+                <argument name="css_class" xsi:type="string">cms-content-important</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <container htmlTag="div" htmlId="description-container">
+                <block name="myblog.description" template="BVMyBlog_Blog::description.phtml">
+                    <arguments>
+                        <argument name="description_view_model" xsi:type="object">BVMyBlog\Blog\ViewModel\Description</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+    </body>
+</page>
