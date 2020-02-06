@@ -13,7 +13,6 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 class Index extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     protected $resultPageFactory = false;
-
     protected $blogCollectionFactory;
 
     /**
@@ -41,7 +40,6 @@ class Index extends \Magento\Backend\App\Action implements HttpGetActionInterfac
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend((__('Blog Posts')));
-
         return $resultPage;
     }
 }

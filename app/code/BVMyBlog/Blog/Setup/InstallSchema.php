@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace BVMyBlog\Blog\Setup;
 
-use Zend_Db_Exception;
-
 /**
  * Class InstallSchema
  *
@@ -22,9 +20,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
         \Magento\Framework\Setup\SchemaSetupInterface $setup,
         \Magento\Framework\Setup\ModuleContextInterface $context
     ) {
-        if (version_compare($context->getVersion(), '1.0.1') < 0) {
-            throw new Zend_Db_Exception('Upgrade install schema script');
-        }
+        $context->getVersion();
         $installer = $setup;
         $installer->startSetup();
         if (!$installer->tableExists('bvmyblog_blog_post')) {

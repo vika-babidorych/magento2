@@ -40,7 +40,7 @@ class Top implements ArgumentInterface
     public function listTop()
     {
         $collection = $this->modelFactory->create();
-        $collection->setOrder('created_at', 'ASC')->setPageSize(5);
+        $collection->setOrder('created_at', 'DESC')->setPageSize(5);
         return $collection;
     }
 

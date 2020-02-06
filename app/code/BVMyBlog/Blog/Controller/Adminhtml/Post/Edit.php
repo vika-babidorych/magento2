@@ -12,8 +12,6 @@ use Magento\Backend\App\Action;
  */
 class Edit extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'Post';
-
     protected $resultPageFactory;
     /**
      * Construct

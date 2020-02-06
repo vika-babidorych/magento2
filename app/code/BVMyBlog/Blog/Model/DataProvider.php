@@ -49,9 +49,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->_loadedData)) {
             return $this->_loadedData;
         }
-
         $items = $this->collection->getItems();
-
         foreach ($items as $record) {
             $recordData = $record->getData();
             $path_parts = $this->pathToFile->getPathInfo($recordData['url_key']);
@@ -64,7 +62,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $recordData['url_key'] = $record_img;
             $this->_loadedData[$record->getId()] = $recordData;
         }
-
         return $this->_loadedData;
     }
 }

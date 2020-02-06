@@ -11,10 +11,8 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
  */
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
-    const ADMIN_RESOURCE = 'Post';
-
-    protected $resultPageFactory;
-    protected $postFactory;
+    private $resultPageFactory;
+    private $postFactory;
 
     /**
      * Construct
@@ -52,7 +50,6 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 $data = array_filter($data, function ($value) {
                     return $value !== '';
                 });
-
                 $post->setData($data);
                 $post->save();
                 $this->messageManager->addSuccess(__('Successfully saved the post.'));
@@ -64,7 +61,6 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 return $resultRedirect->setPath('*/*/edit', ['id' => $post->getId()]);
             }
         }
-
         return $resultRedirect->setPath('*/*/');
     }
 }

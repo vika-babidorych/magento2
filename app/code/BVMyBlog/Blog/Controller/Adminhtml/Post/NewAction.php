@@ -11,8 +11,6 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
  */
 class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'Post';
-
     protected $resultPageFactory;
 
     /**

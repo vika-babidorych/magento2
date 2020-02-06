@@ -6,8 +6,8 @@
             <resource id="Magento_Backend::admin">
                 <resource id="BVMyBlog_Blog::blog" title="My Blog"
                           sortOrder="10" >
-                    <resource id="BVMyBlog_Blog::blog_manage_items"
-                              title="Manage Records" sortOrder="0" />
+                    <resource id="BVMyBlog_Blog::blog_manage_posts"
+                              title="Manage Posts" sortOrder="0" />
                     <resource id="BVMyBlog_Blog::blog_configuration"
                               title="Configuration Blog " sortOrder="100" />
                 </resource>

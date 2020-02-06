@@ -6,16 +6,12 @@
             <item name="provider" xsi:type="string">bvmyblog_blog_form.bvmyblog_blog_form_data_source</item>
             <item name="deps" xsi:type="string">bvmyblog_blog_form.bvmyblog_blog_form_data_source</item>
         </item>
-
         <item name="label" xsi:type="string" translate="true">Blog edit</item>
-
         <item name="config" xsi:type="array">
             <item name="dataScope" xsi:type="string">data</item>
             <item name="namespace" xsi:type="string">bvmyblog_blog_form</item>
         </item>
-
         <item name="template" xsi:type="string">templates/form/collapsible</item>
-
         <item name="buttons" xsi:type="array">
             <item name="back" xsi:type="string">BVMyBlog\Blog\Block\Adminhtml\Block\Edit\BackButton</item>
             <item name="save" xsi:type="string">BVMyBlog\Blog\Block\Adminhtml\Block\Edit\SaveButton</item>
@@ -113,7 +109,6 @@
                <item name="config" xsi:type="array">
                    <item name="dataType" xsi:type="string">string</item>
                    <item name="label" xsi:type="string" translate="true">Image</item>
-
                    <item name="formElement" xsi:type="string">imageUploader</item>
                    <item name="source" xsi:type="string">bvmyblog</item>
                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>

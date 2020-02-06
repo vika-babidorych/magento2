@@ -11,8 +11,6 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
  */
 class Delete extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'Post';
-
     protected $resultPageFactory;
     protected $contactFactory;
 

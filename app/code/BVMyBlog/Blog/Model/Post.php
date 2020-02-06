@@ -11,10 +11,6 @@ class Post extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
 {
     const CACHE_TAG = 'bvmyblog_blog_post';
 
-    protected $_cacheTag = 'bvmyblog_blog_post';
-
-    protected $_eventPrefix = 'bvmyblog_blog_post';
-
     /**
      * Construct
      */

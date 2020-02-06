@@ -6,13 +6,11 @@ $id = $block->getRequest()->getParam('id');
 $data = $descViewModel->getPostById($id)->getData();
 ?>
 <div>
-
     <?php $post_id = $data['post_id'];
         $name = $data['name'];
         $post_content = $data['post_content'];
         $url_key = $data['url_key'];
         $created_at = $data['created_at']; ?>
-
     <?= /* @noEscape */ "<h4>Id:</h4><p>$post_id</p>" ?>
     <?= /* @noEscape */ "<h4>Name:</h4><p>$name</p>" ?>
     <?= /* @noEscape */ "<h4>Post Content:</h4><p>$post_content</p>" ?>
