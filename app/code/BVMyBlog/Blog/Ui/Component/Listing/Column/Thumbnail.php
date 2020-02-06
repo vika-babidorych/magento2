@@ -6,7 +6,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
- * Class ContactsActions
+ * Class Actions
  *
  * Thumbnail, image in grid
  * @property \Magento\Framework\UrlInterface urlBuilder

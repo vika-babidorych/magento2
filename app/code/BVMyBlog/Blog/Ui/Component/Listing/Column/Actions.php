@@ -7,11 +7,11 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
- * Class ContactsActions
+ * Class Actions
  *
  * Actions edit and delete
  */
-class ContactsActions extends \Magento\Ui\Component\Listing\Columns\Column
+class Actions extends \Magento\Ui\Component\Listing\Columns\Column
 {
     protected $urlBuilder;
 
