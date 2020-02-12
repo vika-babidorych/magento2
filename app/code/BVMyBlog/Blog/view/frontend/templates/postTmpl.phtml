@@ -1,0 +1,19 @@
+<?php
+/** @var \BVMyBlog\Blog\Block\Post $block*/
+
+$descPost = $block->getData('description_post');
+$id = $descPost->getBlogId();
+$data = $descPost->getPostById($id);
+?>
+<div>
+    <?php $post_id = $data->getId();
+        $title= $data->getTitle();
+        $post_content = $data->getContent();
+        $img_path = $data->getImgPath();
+        $created_at = $data->getCreationTime(); ?>
+    <h4>Id:</h4><p><?= $block->escapeHtml($post_id) ?></p>
+    <h4>Title:</h4><p><?= $block->escapeHtml($title) ?></p>
+    <h4>Content:</h4><p><?= $block->escapeHtml($post_content) ?></p>
+    <h4>Created at:</h4><p><?= $block->escapeHtml($created_at) ?></p>
+    <img src='<?= $block->escapeUrl($img_path) ?>'/>
+</div>

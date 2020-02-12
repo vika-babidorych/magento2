@@ -1,24 +1,29 @@
 <?php
 declare(strict_types=1);
+
 namespace BVMyBlog\Blog\Setup;
 
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
 /**
- * Class InstallSchema
- *
- * Setup InstallSchema
+ * Setups the database structure
  */
-class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
+class InstallSchema implements InstallSchemaInterface
 {
     /**
-     * Function install
+     * Install the database structure
      *
-     * @param \Magento\Framework\Setup\SchemaSetupInterface $setup
-     * @param \Magento\Framework\Setup\ModuleContextInterface $context
+     * @param SchemaSetupInterface $setup
+     * @param ModuleContextInterface $context
      * @throws \Zend_Db_Exception
      */
     public function install(
-        \Magento\Framework\Setup\SchemaSetupInterface $setup,
-        \Magento\Framework\Setup\ModuleContextInterface $context
+        SchemaSetupInterface $setup,
+        ModuleContextInterface $context
     ) {
         $context->getVersion();
         $installer = $setup;
@@ -29,7 +34,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             )
                 ->addColumn(
                     'post_id',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    Table::TYPE_INTEGER,
                     null,
                     [
                         'identity' => true,
@@ -40,32 +45,32 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     'Post ID'
                 )
                 ->addColumn(
-                    'name',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'title',
+                    Table::TYPE_TEXT,
                     255,
                     ['nullable => false'],
-                    'Post Name'
+                    'Post Title'
                 )
                 ->addColumn(
                     'post_content',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    Table::TYPE_TEXT,
                     '64k',
                     [],
                     'Post Post Content'
                 )
                 ->addColumn(
-                    'url_key',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'img_path',
+                    Table::TYPE_TEXT,
                     255,
                     [],
-                    'Post URL Key'
+                    'Post Image Path'
                 )
 
                 ->addColumn(
                     'created_at',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    Table::TYPE_TIMESTAMP,
                     null,
-                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+                    ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                     'Created At'
                 )
 
@@ -76,11 +81,11 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 $installer->getTable('bvmyblog_blog_post'),
                 $setup->getIdxName(
                     $installer->getTable('bvmyblog_blog_post'),
-                    ['name','url_key','post_content'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+                    ['post_id'],
+                    AdapterInterface::INDEX_TYPE_INDEX
                 ),
-                ['name','url_key','post_content'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT
+                ['post_id'],
+                AdapterInterface::INDEX_TYPE_INDEX
             );
         }
         $installer->endSetup();

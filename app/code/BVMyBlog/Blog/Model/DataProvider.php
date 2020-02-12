@@ -1,41 +1,68 @@
 <?php
 declare(strict_types=1);
+
 namespace BVMyBlog\Blog\Model;
 
-use BVMyBlog\Blog\Model\ResourceModel\Post\CollectionFactory;
+use BVMyBlog\Blog\Model\ResourceModel\Block\CollectionFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Ui\DataProvider\AbstractDataProvider;
+use Magento\Framework\Filesystem\Io\File;
 
 /**
- * Class DataProvider
- *
  * Model DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
-    protected $collection;
-    protected $_loadedData;
-    protected $pathToFile;
     /**
-     * Construct
-     *
+     * @var File $pathToFile
+     */
+    private $pathToFile;
+
+    /**
+     * @var ResourceModel\Block\Collection $collection
+     */
+    protected $collection;
+
+    /**
+     * @var array $loadedData
+     */
+    private $loadedData;
+
+    /**
+     * @var SearchCriteriaBuilder $searchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+    /**
+     * @var BlockRepository $blockRepository
+     */
+    private $blockRepository;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
+     * @param File $pathToFile
      * @param CollectionFactory $blogCollectionFactory
-     * @param \Magento\Framework\Filesystem\Io\File $pathToFile
+     * @param BlockRepository $blockRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $meta
      * @param array $data
      */
     public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
+        string $name,
+        string $primaryFieldName,
+        string $requestFieldName,
+        File $pathToFile,
         CollectionFactory $blogCollectionFactory,
-        \Magento\Framework\Filesystem\Io\File $pathToFile,
+        BlockRepository $blockRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         array $meta = [],
         array $data = []
     ) {
-        $this->collection = $blogCollectionFactory->create();
         $this->pathToFile = $pathToFile;
+        $this->collection = $blogCollectionFactory->create();
+        $this->blockRepository = $blockRepository;
+        $this->searchCriteriaBuilder=$searchCriteriaBuilder;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
@@ -46,22 +73,26 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getData()
     {
-        if (isset($this->_loadedData)) {
-            return $this->_loadedData;
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
         }
-        $items = $this->collection->getItems();
+        $items = $this->blockRepository->getList(($this->searchCriteriaBuilder->create()))->getItems();
+
         foreach ($items as $record) {
-            $recordData = $record->getData();
-            $path_parts = $this->pathToFile->getPathInfo($recordData['url_key']);
+            $path_parts = $this->pathToFile->getPathInfo($record->getImgPath());
             $record_img = [
                 ['type'=>'image',
                     'name' => $path_parts['filename'],
-                    'url' => $recordData['url_key']
+                    'url' => $record->getImgPath()
                 ]
             ];
-            $recordData['url_key'] = $record_img;
-            $this->_loadedData[$record->getId()] = $recordData;
+            $loadedData = [$record::POST_ID => $record->getId(),
+                $record::TITLE => $record->getTitle(),
+                $record::POST_CONTENT => $record->getContent(),
+                $record::IMG_PATH => $record_img,
+                $record::CREATED_AT => $record->getCreationTime()];
+            $this->loadedData[$record->getId()] = $loadedData;
         }
-        return $this->_loadedData;
+        return $this->loadedData;
     }
 }

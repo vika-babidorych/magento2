@@ -1,0 +1,20 @@
+<?php
+/** @var \BVMyBlog\Blog\Block\LastPosts $block*/
+
+$lastPosts = $block->getData('last_posts');
+$data = $lastPosts->getTopBlogs();
+$match = $lastPosts->isMatch();
+?>
+<div>
+    <?php if ($match): ?>
+    <h3><?= $block->escapeHtml(__('Last 5 posts:')) ?></h3>
+        <ul>
+            <?php foreach ($data as $value):
+                $item = $value->getTitle();
+                $id = $value->getId();?>
+                <li><a href='<?= $block->escapeHtml($lastPosts->getUrlById($id))?>'>
+                        <?= $block->escapeHtml($item) ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>

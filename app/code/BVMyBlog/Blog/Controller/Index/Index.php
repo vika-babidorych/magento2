@@ -4,35 +4,38 @@ namespace BVMyBlog\Blog\Controller\Index;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
- * Class Index
- *
- * Controller Index
+ * Renders index page
  */
 class Index extends Action implements HttpGetActionInterface
 {
-    protected $_pageFactory;
+    /**
+     * @var PageFactory $pageFactory
+     */
+    private $pageFactory;
 
     /**
-     * Construct
+     * @inheritdoc
      *
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $pageFactory
+     * @param Context $context
+     * @param PageFactory $pageFactory
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $pageFactory
+        Context $context,
+        PageFactory $pageFactory
     ) {
-        $this->_pageFactory = $pageFactory;
+        $this->pageFactory = $pageFactory;
         return parent::__construct($context);
     }
 
     /**
-     * Function execute
+     * @inheritdoc
      */
     public function execute()
     {
-        return $this->_pageFactory->create();
+        return $this->pageFactory->create();
     }
 }

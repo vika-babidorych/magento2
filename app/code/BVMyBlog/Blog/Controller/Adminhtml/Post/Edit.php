@@ -1,35 +1,41 @@
 <?php
 declare(strict_types=1);
+
 namespace BVMyBlog\Blog\Controller\Adminhtml\Post;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
- * Class Edit
- *
- * Controller Edit
+ * Edits post in form
  */
 class Edit extends Action implements HttpGetActionInterface
 {
-    protected $resultPageFactory;
+    const ADMIN_RESOURCE = 'BVMyBlog_Blog::blog_manage_posts';
+
     /**
-     * Construct
+     * @var PageFactory $resultPageFactory
+     */
+    private $resultPageFactory;
+
+    /**
+     * @inheritdoc
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @return string
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        Context $context,
+        PageFactory $resultPageFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
     /**
-     * Function execute
+     * @inheritdoc
      */
     public function execute()
     {

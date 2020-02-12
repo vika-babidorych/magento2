@@ -18,22 +18,19 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="bvmyblog_blog_post_listing_data_source"
-                  xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Post\Grid\Collection</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <virtualType name="BVMyBlog\Blog\Model\ResourceModel\Post\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <virtualType name="BVMyBlog\Blog\Model\ResourceModel\Post\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">bvmyblog_blog_post</argument>
             <argument name="resourceModel" xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Post</argument>
         </arguments>
     </virtualType>
 
+    <type name="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">BlogImageUploader</argument>
+        </arguments>
+    </type>
     <virtualType name="BlogImageUploader" type="Magento\Catalog\Model\ImageUploader">
         <arguments>
             <argument name="baseTmpPath" xsi:type="string">blog/tmp</argument>
@@ -47,10 +44,45 @@
         </arguments>
     </virtualType>
 
-    <type name="BVMyBlog\Blog\Controller\Adminhtml\Post\Upload">
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
-            <argument name="imageUploader" xsi:type="object">BlogImageUploader</argument>
+            <argument name="entities" xsi:type="array">
+                <item name="BVMyBlog\Blog\Api\Data\BlockInterface" xsi:type="string">BVMyBlog\Blog\Api\BlockRepositoryInterface</item>
+            </argument>
         </arguments>
     </type>
+    <virtualType name="BVMyBlog\Blog\Model\Api\SearchCriteria\BlockCollectionProcessor"
+                 type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\CollectionProcessor\BlockFilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="BVMyBlog\Blog\Model\BlockRepository">
+        <arguments>
+            <argument name="collectionProcessor"
+                      xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\BlockCollectionProcessor
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="BVMyBlog\Blog\Model\Api\SearchCriteria\CollectionProcessor\BlockFilterProcessor"
+                 type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="store_id"
+                      xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\BlockStoreFilter
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
 
+    <preference for="BVMyBlog\Blog\Api\BlockRepositoryInterface"
+                type="BVMyBlog\Blog\Model\BlockRepository" />
+    <preference for="BVMyBlog\Blog\Api\Data\BlockInterface"
+                type="BVMyBlog\Blog\Model\Block" />
+    <preference for="Magento\Framework\Api\SearchResultsInterface"
+                type="BVMyBlog\Blog\Model\BlockSearchResults" />
 </config>

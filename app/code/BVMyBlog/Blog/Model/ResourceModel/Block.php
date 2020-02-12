@@ -6,9 +6,9 @@ namespace BVMyBlog\Blog\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Form Resource Model Post
+ * Grid Resource Model Block
  */
-class Post extends AbstractDb
+class Block extends AbstractDb
 {
     /**
      * @inheritdoc

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/Block/:blockId" method="GET">
+        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="getById"/>
+        <resources>
+            <resource ref="BVMyBlog_Blog::block"/>
+        </resources>
+    </route>
+    <route url="/V1/Block" method="GET">
+        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="BVMyBlog_Blog::block"/>
+        </resources>
+    </route>
+    <route url="/V1/Block" method="POST">
+        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="BVMyBlog_Blog::block"/>
+        </resources>
+    </route>
+    <route url="/V1/Block/:id" method="PUT">
+        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="BVMyBlog_Blog::block"/>
+        </resources>
+    </route>
+</routes>

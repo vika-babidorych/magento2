@@ -1,66 +1,129 @@
 <?php
 declare(strict_types=1);
+
 namespace BVMyBlog\Blog\Controller\Adminhtml\Post;
 
+use BVMyBlog\Blog\Api\BlockRepositoryInterface;
+use BVMyBlog\Blog\Model\BlockFactory;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Backend\App\Action;
+use BVMyBlog\Blog\Model\Block;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
- * Class Save
- *
- * Controller Save
+ * Saves data from form
  */
-class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
+class Save extends Action implements HttpPostActionInterface
 {
-    private $resultPageFactory;
-    private $postFactory;
+    const ADMIN_RESOURCE = 'BVMyBlog_Blog::blog_manage_posts';
 
     /**
-     * Construct
-     *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \BVMyBlog\Blog\Model\PostFactory $postFactory
+     * @var mixed $blockFactory
+     */
+    private $blockFactory;
+
+    /**
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+
+    /**
+     * @var BlockRepositoryInterface
+     */
+    private $blockRepository;
+
+    /**
+     * @param Context $context
+     * @param DataPersistorInterface $dataPersistor
+     * @param BlockFactory $blockFactory
+     * @param BlockRepositoryInterface|null $blockRepository
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \BVMyBlog\Blog\Model\PostFactory $postFactory
+        Context $context,
+        DataPersistorInterface $dataPersistor,
+        BlockFactory $blockFactory = null,
+        BlockRepositoryInterface $blockRepository = null
     ) {
-        $this->resultPageFactory = $resultPageFactory;
-        $this->postFactory = $postFactory;
+        $this->dataPersistor = $dataPersistor;
+        $this->blockFactory = $blockFactory
+            ?: ObjectManager::getInstance()->get(BlockFactory::class);
+        $this->blockRepository = $blockRepository
+            ?: ObjectManager::getInstance()->get(BlockRepositoryInterface::class);
         parent::__construct($context);
     }
 
     /**
-     * Function execute
+     * @inheritdoc
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue();
-
         if ($data) {
-            try {
-                $id = $data['post_id'];
-                $image_url = $data['url_key'][0]['url'];
-                $data['url_key'] = $image_url;
-
-                $post = $this->postFactory->create()->load($id);
-
-                $data = array_filter($data, function ($value) {
-                    return $value !== '';
-                });
-                $post->setData($data);
-                $post->save();
-                $this->messageManager->addSuccess(__('Successfully saved the post.'));
-                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
-                return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($data);
-                return $resultRedirect->setPath('*/*/edit', ['id' => $post->getId()]);
+            if (empty($data['post_id'])) {
+                $data['post_id'] = null;
             }
+            /** @var Block $post */
+            $post = $this->blockFactory->create();
+            $imgPath = $data['img_path'][0]['url'];
+            $data['img_path'] = $imgPath;
+
+            $id = $this->getRequest()->getParam('post_id');
+            if ($id) {
+                try {
+                    $post = $this->blockRepository->getById($id);
+                } catch (LocalizedException $e) {
+                    $this->messageManager->addErrorMessage(__('This post no longer exists.'));
+                    return $resultRedirect->setPath('*/*/');
+                }
+            }
+            $post->setData($data);
+            try {
+                $this->blockRepository->save($post);
+                $this->messageManager->addSuccessMessage(__('You saved the post.'));
+                $this->dataPersistor->clear('bvmyblog_blog_post');
+                return $this->processBlockReturn($post, $data, $resultRedirect);
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+            } catch (\Exception $e) {
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the post.'));
+            }
+            $this->dataPersistor->set('bvmyblog_blog_post', $data);
+            return $resultRedirect->setPath('*/*/edit', ['post_id' => $id]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Process and set the block return
+     *
+     * @param Block $post
+     * @param array $data
+     * @param ResultInterface $resultRedirect
+     * @return ResultInterface
+     * @throws LocalizedException
+     */
+    private function processBlockReturn($post, $data, $resultRedirect)
+    {
+        $redirect = $data['back'] ?? 'close';
+
+        if ($redirect === 'continue') {
+            $resultRedirect->setPath('*/*/', ['post_id' => $post->getId()]);
+        } elseif ($redirect === 'close') {
+            $resultRedirect->setPath('*/*/');
+        } elseif ($redirect === 'duplicate') {
+            $duplicateModel = $this->blockFactory->create(['data' => $data]);
+            $duplicateModel->setId(null);
+            $this->blockRepository->save($duplicateModel);
+            $id = $duplicateModel->getId();
+            $this->messageManager->addSuccessMessage(__('You duplicated the post.'));
+            $this->dataPersistor->set('bvmyblog_blog_post', $data);
+            $resultRedirect->setPath('*/*/', ['post_id' => $id]);
+        }
+        return $resultRedirect;
     }
 }

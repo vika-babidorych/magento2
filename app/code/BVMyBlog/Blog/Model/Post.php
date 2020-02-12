@@ -1,22 +1,25 @@
 <?php
 declare(strict_types=1);
+
 namespace BVMyBlog\Blog\Model;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject\IdentityInterface;
+use BVMyBlog\Blog\Model\ResourceModel\Post as ModelPost;
+
 /**
- * Class Post
- *
- * Model Post
+ * Form Model Post
  */
-class Post extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+class Post extends AbstractModel implements IdentityInterface
 {
     const CACHE_TAG = 'bvmyblog_blog_post';
 
     /**
-     * Construct
+     * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(\BVMyBlog\Blog\Model\ResourceModel\Post::class);
+        $this->_init(ModelPost::class);
     }
 
     /**
@@ -25,14 +28,5 @@ class Post extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
-    }
-
-    /**
-     * Function getDefaultValues
-     */
-    public function getDefaultValues()
-    {
-        $values = [];
-        return $values;
     }
 }
