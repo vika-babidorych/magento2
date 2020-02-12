@@ -58,7 +58,7 @@ class Thumbnail extends Column
      * Get Alt
      *
      * @param array $row
-     * @return null|string
+     * @return string
      */
     protected function getAlt($row)
     {
