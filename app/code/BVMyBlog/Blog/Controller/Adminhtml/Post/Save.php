@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Controller\Adminhtml\Post;
 
-use BVMyBlog\Blog\Api\BlockRepositoryInterface;
-use BVMyBlog\Blog\Model\BlockFactory;
-use Magento\Backend\App\Action\Context;
+use BVMyBlog\Blog\Api\BlogRepositoryInterface;
+use BVMyBlog\Blog\Model\BlogFactory;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
-use Magento\Backend\App\Action;
-use BVMyBlog\Blog\Model\Block;
+use Magento\Framework\App\Action\Action;
+use BVMyBlog\Blog\Model\Blog;
 use Magento\Framework\Controller\ResultInterface;
 
 /**
@@ -22,9 +22,9 @@ class Save extends Action implements HttpPostActionInterface
     const ADMIN_RESOURCE = 'BVMyBlog_Blog::blog_manage_posts';
 
     /**
-     * @var mixed $blockFactory
+     * @var mixed $blogFactory
      */
-    private $blockFactory;
+    private $blogFactory;
 
     /**
      * @var DataPersistorInterface
@@ -32,27 +32,25 @@ class Save extends Action implements HttpPostActionInterface
     protected $dataPersistor;
 
     /**
-     * @var BlockRepositoryInterface
+     * @var BlogRepositoryInterface
      */
-    private $blockRepository;
+    private $blogRepository;
 
     /**
      * @param Context $context
      * @param DataPersistorInterface $dataPersistor
-     * @param BlockFactory $blockFactory
-     * @param BlockRepositoryInterface|null $blockRepository
+     * @param BlogFactory $blogFactory
+     * @param BlogRepositoryInterface|null $blogRepository
      */
     public function __construct(
         Context $context,
         DataPersistorInterface $dataPersistor,
-        BlockFactory $blockFactory = null,
-        BlockRepositoryInterface $blockRepository = null
+        BlogFactory $blogFactory,
+        BlogRepositoryInterface $blogRepository
     ) {
         $this->dataPersistor = $dataPersistor;
-        $this->blockFactory = $blockFactory
-            ?: ObjectManager::getInstance()->get(BlockFactory::class);
-        $this->blockRepository = $blockRepository
-            ?: ObjectManager::getInstance()->get(BlockRepositoryInterface::class);
+        $this->blogFactory = $blogFactory;
+        $this->blogRepository = $blogRepository;
         parent::__construct($context);
     }
 
@@ -67,15 +65,15 @@ class Save extends Action implements HttpPostActionInterface
             if (empty($data['post_id'])) {
                 $data['post_id'] = null;
             }
-            /** @var Block $post */
-            $post = $this->blockFactory->create();
-            $imgPath = $data['img_path'][0]['url'];
-            $data['img_path'] = $imgPath;
+            /** @var Blog $post */
+            $post = $this->blogFactory->create(['data' => $data]);
+            $imgPath = $data['image_path'][0]['url'];
+            $data['image_path'] = $imgPath;
 
             $id = $this->getRequest()->getParam('post_id');
             if ($id) {
                 try {
-                    $post = $this->blockRepository->getById($id);
+                    $post = $this->blogRepository->getById($id);
                 } catch (LocalizedException $e) {
                     $this->messageManager->addErrorMessage(__('This post no longer exists.'));
                     return $resultRedirect->setPath('*/*/');
@@ -83,7 +81,7 @@ class Save extends Action implements HttpPostActionInterface
             }
             $post->setData($data);
             try {
-                $this->blockRepository->save($post);
+                $this->blogRepository->save($post);
                 $this->messageManager->addSuccessMessage(__('You saved the post.'));
                 $this->dataPersistor->clear('bvmyblog_blog_post');
                 return $this->processBlockReturn($post, $data, $resultRedirect);
@@ -99,13 +97,13 @@ class Save extends Action implements HttpPostActionInterface
     }
 
     /**
-     * Process and set the block return
+     * Process and set the blog return
      *
-     * @param Block $post
+     * @param Blog $post
      * @param array $data
      * @param ResultInterface $resultRedirect
-     * @return ResultInterface
-     * @throws LocalizedException
+     * @return ResultInterface $resultRedirect
+     * @throws CouldNotSaveException
      */
     private function processBlockReturn($post, $data, $resultRedirect)
     {
@@ -116,9 +114,9 @@ class Save extends Action implements HttpPostActionInterface
         } elseif ($redirect === 'close') {
             $resultRedirect->setPath('*/*/');
         } elseif ($redirect === 'duplicate') {
-            $duplicateModel = $this->blockFactory->create(['data' => $data]);
+            $duplicateModel = $this->blogFactory->create(['data' => $data]);
             $duplicateModel->setId(null);
-            $this->blockRepository->save($duplicateModel);
+            $duplicateModel = $this->blogRepository->save($duplicateModel);
             $id = $duplicateModel->getId();
             $this->messageManager->addSuccessMessage(__('You duplicated the post.'));
             $this->dataPersistor->set('bvmyblog_blog_post', $data);

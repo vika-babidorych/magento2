@@ -3,61 +3,72 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Controller\Adminhtml\Post;
 
-use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use BVMyBlog\Blog\Api\BlockRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
+use BVMyBlog\Blog\Api\BlogRepositoryInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Deletes a post from the table
  */
-class Delete extends Action implements HttpGetActionInterface
+class Delete extends Action implements HttpPostActionInterface
 {
     const ADMIN_RESOURCE = 'BVMyBlog_Blog::blog_manage_posts';
 
     /**
-     * @var BlockRepositoryInterface
+     * Index resultPageFactory
+     * @var PageFactory
      */
-    private $blockRepository;
+    private $resultPageFactory;
+
+    /**
+     * @var BlogRepositoryInterface
+     */
+    private $blogRepository;
 
     /**
      * @inheritdoc
      *
      * @param Context $context
-     * @param BlockRepositoryInterface|null $blockRepository
+     * @param PageFactory $resultPageFactory
+     * @param BlogRepositoryInterface|null $blogRepository
      */
     public function __construct(
         Context $context,
-        BlockRepositoryInterface $blockRepository = null
+        PageFactory $resultPageFactory,
+        BlogRepositoryInterface $blogRepository
     ) {
-        $this->blockRepository = $blockRepository
-            ?: ObjectManager::getInstance()->get(BlockRepositoryInterface::class);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->blogRepository = $blogRepository;
         parent::__construct($context);
     }
 
     /**
      * @inheritdoc
+     *
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
         $id = (int) $this->getRequest()->getParam('id');
+        $post = $this->blogRepository->getById($id);
 
-        $post = $this->blockRepository->getById($id);
-
-        if (!$id) {
+        if (!$post->getId()) {
             $this->messageManager->addError(__('Unable to process, there is no post with this ID.'));
             $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath('*/*/post', ['_current' => true]);
+            return $resultRedirect->setPath('*/*/', ['_current' => true]);
         }
 
         try {
-            $this->blockRepository->delete($post);
+            $this->blogRepository->delete($post);
             $this->messageManager->addSuccess(__('Your post has been deleted!'));
-        } catch (\Exception $e) {
+        } catch (CouldNotDeleteException $e) {
             $this->messageManager->addError(__('Error while trying to delete post'));
             $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath('*/*/post', ['_current' => true]);
+            return $resultRedirect->setPath('*/*/', ['_current' => true]);
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Model;
 
-use BVMyBlog\Blog\Model\ResourceModel\Block\CollectionFactory;
+use BVMyBlog\Blog\Model\ResourceModel\Blog\CollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Framework\Filesystem\Io\File;
@@ -19,7 +19,7 @@ class DataProvider extends AbstractDataProvider
     private $pathToFile;
 
     /**
-     * @var ResourceModel\Block\Collection $collection
+     * @var ResourceModel\Blog\Collection $collection
      */
     protected $collection;
 
@@ -33,9 +33,9 @@ class DataProvider extends AbstractDataProvider
      */
     private $searchCriteriaBuilder;
     /**
-     * @var BlockRepository $blockRepository
+     * @var BlogRepository $blogRepository
      */
-    private $blockRepository;
+    private $blogRepository;
 
     /**
      * @param string $name
@@ -43,7 +43,7 @@ class DataProvider extends AbstractDataProvider
      * @param string $requestFieldName
      * @param File $pathToFile
      * @param CollectionFactory $blogCollectionFactory
-     * @param BlockRepository $blockRepository
+     * @param BlogRepository $blogRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $meta
      * @param array $data
@@ -54,14 +54,14 @@ class DataProvider extends AbstractDataProvider
         string $requestFieldName,
         File $pathToFile,
         CollectionFactory $blogCollectionFactory,
-        BlockRepository $blockRepository,
+        BlogRepository $blogRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $meta = [],
         array $data = []
     ) {
         $this->pathToFile = $pathToFile;
         $this->collection = $blogCollectionFactory->create();
-        $this->blockRepository = $blockRepository;
+        $this->blogRepository = $blogRepository;
         $this->searchCriteriaBuilder=$searchCriteriaBuilder;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
@@ -76,22 +76,19 @@ class DataProvider extends AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $items = $this->blockRepository->getList(($this->searchCriteriaBuilder->create()))->getItems();
+        $items = $this->blogRepository->getList(($this->searchCriteriaBuilder->create()))->getItems();
 
         foreach ($items as $record) {
-            $path_parts = $this->pathToFile->getPathInfo($record->getImgPath());
-            $record_img = [
+            $recordData = $record->getData();
+            $pathParts = $this->pathToFile->getPathInfo($recordData['image_path']);
+            $recordImg = [
                 ['type'=>'image',
-                    'name' => $path_parts['filename'],
-                    'url' => $record->getImgPath()
+                    'name' => $pathParts['filename'],
+                    'url' => $recordData['image_path']
                 ]
             ];
-            $loadedData = [$record::POST_ID => $record->getId(),
-                $record::TITLE => $record->getTitle(),
-                $record::POST_CONTENT => $record->getContent(),
-                $record::IMG_PATH => $record_img,
-                $record::CREATED_AT => $record->getCreationTime()];
-            $this->loadedData[$record->getId()] = $loadedData;
+            $recordData['image_path'] = $recordImg;
+            $this->loadedData[$record->getId()] = $recordData;
         }
         return $this->loadedData;
     }

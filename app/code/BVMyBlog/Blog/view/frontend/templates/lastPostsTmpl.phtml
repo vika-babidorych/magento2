@@ -1,9 +1,8 @@
 <?php
 /** @var \BVMyBlog\Blog\Block\LastPosts $block*/
 
-$lastPosts = $block->getData('last_posts');
-$data = $lastPosts->getTopBlogs();
-$match = $lastPosts->isMatch();
+$data = $block->getTopBlogs();
+$match = $block->isMatch();
 ?>
 <div>
     <?php if ($match): ?>
@@ -12,7 +11,7 @@ $match = $lastPosts->isMatch();
             <?php foreach ($data as $value):
                 $item = $value->getTitle();
                 $id = $value->getId();?>
-                <li><a href='<?= $block->escapeHtml($lastPosts->getUrlById($id))?>'>
+                <li><a href='<?= $block->escapeHtml($block->getUrlById($id))?>'>
                         <?= $block->escapeHtml($item) ?></a></li>
             <?php endforeach; ?>
         </ul>

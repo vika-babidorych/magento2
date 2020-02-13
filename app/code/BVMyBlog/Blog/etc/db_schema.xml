@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="bvmyblog_blog_post" resource="default" engine="innodb" comment="BVMyBlog Blog Post">
+        <column xsi:type="int" name="post_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Post Id"/>
+        <column xsi:type="varchar" name="title" length="255" nullable="false" comment="Title"/>
+        <column xsi:type="text" name="post_content" nullable="false" comment="Post Content"/>
+        <column xsi:type="varchar" name="image_path" length="255" nullable="false" comment="Post Image Path"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="post_id"/>
+        </constraint>
+    </table>
+</schema>

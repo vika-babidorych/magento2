@@ -11,11 +11,7 @@
         </referenceBlock>
         <referenceContainer name="content">
             <container htmlTag="div" htmlId="description-container">
-                <block name="myblog.post" template="BVMyBlog_Blog::postTmpl.phtml">
-                    <arguments>
-                        <argument name="description_post" xsi:type="object">BVMyBlog\Blog\Block\Post</argument>
-                    </arguments>
-                </block>
+                <block class="BVMyBlog\Blog\Block\Post" name="bvmyblog_blog.post" template="BVMyBlog_Blog::postTmpl.phtml"/>
             </container>
         </referenceContainer>
     </body>

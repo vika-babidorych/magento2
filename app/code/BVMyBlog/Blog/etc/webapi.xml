@@ -2,28 +2,34 @@
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/Block/:blockId" method="GET">
-        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="getById"/>
+    <route url="/V1/Blog/:blogId" method="GET">
+        <service class="BVMyBlog\Blog\Api\BlogRepositoryInterface" method="getById"/>
         <resources>
-            <resource ref="BVMyBlog_Blog::block"/>
+            <resource ref="BVMyBlog_Blog::blog"/>
         </resources>
     </route>
-    <route url="/V1/Block" method="GET">
-        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="getList"/>
+    <route url="/V1/Blog" method="GET">
+        <service class="BVMyBlog\Blog\Api\BlogRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="BVMyBlog_Blog::block"/>
+            <resource ref="BVMyBlog_Blog::blog"/>
         </resources>
     </route>
-    <route url="/V1/Block" method="POST">
-        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="save"/>
+    <route url="/V1/Blog" method="POST">
+        <service class="BVMyBlog\Blog\Api\BlogRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="BVMyBlog_Blog::block"/>
+            <resource ref="BVMyBlog_Blog::blog"/>
         </resources>
     </route>
-    <route url="/V1/Block/:id" method="PUT">
-        <service class="BVMyBlog\Blog\Api\BlockRepositoryInterface" method="save"/>
+    <route url="/V1/Blog/:id" method="PUT">
+        <service class="BVMyBlog\Blog\Api\BlogRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="BVMyBlog_Blog::block"/>
+            <resource ref="BVMyBlog_Blog::blog"/>
+        </resources>
+    </route>
+    <route url="/V1/Blog/:blogId" method="DELETE">
+        <service class="BVMyBlog\Blog\Api\BlogRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="BVMyBlog_Blog::blog"/>
         </resources>
     </route>
 </routes>

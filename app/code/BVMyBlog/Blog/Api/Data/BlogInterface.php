@@ -5,7 +5,7 @@ namespace BVMyBlog\Blog\Api\Data;
 /**
  * Interface for post data.
  */
-interface BlockInterface
+interface BlogInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -13,7 +13,7 @@ interface BlockInterface
     const POST_ID = 'post_id';
     const TITLE = 'title';
     const POST_CONTENT = 'post_content';
-    const IMG_PATH = 'img_path';
+    const IMAGE_PATH = 'image_path';
     const CREATED_AT = 'created_at';
 
     /**
@@ -42,7 +42,7 @@ interface BlockInterface
      *
      * @return string|null
      */
-    public function getImgPath();
+    public function getImagePath();
 
     /**
      * Get creation time
@@ -55,7 +55,7 @@ interface BlockInterface
      * Set id
      *
      * @param string $id
-     * @return string|null
+     * @return BlogInterface
      */
     public function setId($id);
 
@@ -63,7 +63,7 @@ interface BlockInterface
      * Set title
      *
      * @param string $title
-     * @return BlockInterface
+     * @return BlogInterface
      */
     public function setTitle($title);
 
@@ -71,23 +71,23 @@ interface BlockInterface
      * Set content
      *
      * @param string $content
-     * @return BlockInterface
+     * @return BlogInterface
      */
     public function setContent($content);
 
     /**
      * Set image path
      *
-     * @param string $imgPath
-     * @return string|null
+     * @param string $imagePath
+     * @return BlogInterface
      */
-    public function setImgPath($imgPath);
+    public function setImagePath($imagePath);
 
     /**
      * Set creation time
      *
      * @param string $creationTime
-     * @return BlockInterface
+     * @return BlogInterface
      */
     public function setCreationTime($creationTime);
 }

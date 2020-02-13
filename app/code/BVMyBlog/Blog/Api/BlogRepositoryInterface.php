@@ -3,60 +3,62 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Api;
 
-use BVMyBlog\Blog\Api\Data\BlockInterface;
+use BVMyBlog\Blog\Api\Data\BlogInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Repository interface post data.
  */
-interface BlockRepositoryInterface
+interface BlogRepositoryInterface
 {
     /**
      * Save post.
      *
-     * @param BlockInterface $block
-     * @return BlockInterface
-     * @throws LocalizedException
+     * @param BlogInterface $blog
+     * @return BlogInterface
+     * @throws CouldNotSaveException
      */
-    public function save(BlockInterface $block);
+    public function save(BlogInterface $blog);
 
     /**
      * Retrieve post.
      *
-     * @param string $blockId
-     * @return BlockInterface
-     * @throws LocalizedException
+     * @param string $blogId
+     * @return BlogInterface
+     * @throws NoSuchEntityException
      */
-    public function getById($blockId);
+    public function getById($blogId);
 
     /**
      * Retrieve posts matching the specified criteria.
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultsInterface
-     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
      * Delete post.
      *
-     * @param BlockInterface $block
+     * @param BlogInterface $blog
      * @return bool true on success
-     * @throws LocalizedException
+     * @throws CouldNotDeleteException
      */
-    public function delete(BlockInterface $block);
+    public function delete(BlogInterface $blog);
 
     /**
      * Delete post by ID.
      *
-     * @param string $blockId
+     * @param string $blogId
      * @return bool true on success
      * @throws NoSuchEntityException
-     * @throws LocalizedException
      */
-    public function deleteById($blockId);
+    public function deleteById($blogId);
 }

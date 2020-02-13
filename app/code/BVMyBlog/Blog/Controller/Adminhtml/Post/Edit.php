@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Controller\Adminhtml\Post;
 
-use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
 

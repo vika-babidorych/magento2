@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Controller\Adminhtml\Post;
 
-use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
@@ -42,13 +42,5 @@ class Index extends Action implements HttpGetActionInterface
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend((__('Blog Posts')));
         return $resultPage;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('BVMyBlog_Blog::blog_manage_posts');
     }
 }

@@ -47,42 +47,24 @@
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
-                <item name="BVMyBlog\Blog\Api\Data\BlockInterface" xsi:type="string">BVMyBlog\Blog\Api\BlockRepositoryInterface</item>
+                <item name="BVMyBlog\Blog\Api\Data\BlogInterface" xsi:type="string">BVMyBlog\Blog\Api\BlogRepositoryInterface</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="BVMyBlog\Blog\Model\Api\SearchCriteria\BlockCollectionProcessor"
-                 type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
-        <arguments>
-            <argument name="processors" xsi:type="array">
-                <item name="filters" xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\CollectionProcessor\BlockFilterProcessor</item>
-                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
-                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
-            </argument>
-        </arguments>
-    </virtualType>
+
     <type name="BVMyBlog\Blog\Model\BlockRepository">
         <arguments>
             <argument name="collectionProcessor"
-                      xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\BlockCollectionProcessor
+                      xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\BlogCollectionProcessor
             </argument>
         </arguments>
     </type>
-    <virtualType name="BVMyBlog\Blog\Model\Api\SearchCriteria\CollectionProcessor\BlockFilterProcessor"
-                 type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
-        <arguments>
-            <argument name="customFilters" xsi:type="array">
-                <item name="store_id"
-                      xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor\BlockStoreFilter
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
 
-    <preference for="BVMyBlog\Blog\Api\BlockRepositoryInterface"
-                type="BVMyBlog\Blog\Model\BlockRepository" />
-    <preference for="BVMyBlog\Blog\Api\Data\BlockInterface"
-                type="BVMyBlog\Blog\Model\Block" />
+
+    <preference for="BVMyBlog\Blog\Api\BlogRepositoryInterface"
+                type="BVMyBlog\Blog\Model\BlogRepository" />
+    <preference for="BVMyBlog\Blog\Api\Data\BlogInterface"
+                type="BVMyBlog\Blog\Model\Blog" />
     <preference for="Magento\Framework\Api\SearchResultsInterface"
-                type="BVMyBlog\Blog\Model\BlockSearchResults" />
+                type="Magento\Framework\Api\SearchResults" />
 </config>

@@ -3,19 +3,17 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Model;
 
-use BVMyBlog\Blog\Api\Data\BlockInterface;
-use Magento\Framework\DataObject\IdentityInterface;
+use BVMyBlog\Blog\Api\Data\BlogInterface;
+use BVMyBlog\Blog\Model\ResourceModel\Blog as ModelBlog;
 use Magento\Framework\Model\AbstractModel;
-use BVMyBlog\Blog\Model\ResourceModel\Block as ModelBlock;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Grid Model Block
+ * Grid Model Blog
  */
-class Block extends AbstractModel implements BlockInterface, IdentityInterface
+class Blog extends AbstractModel implements BlogInterface
 {
     /**
-     * Block cache tag
+     * Blog cache tag
      */
     const CACHE_TAG = 'bvmyblog_blog_post';
 
@@ -33,34 +31,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      */
     protected function _construct()
     {
-        $this->_init(ModelBlock::class);
-    }
-
-    /**
-     * Prevent posts recursion
-     *
-     * @return AbstractModel
-     * @throws LocalizedException
-     */
-    public function beforeSave()
-    {
-        $needle = 'post_id="' . $this->getId() . '"';
-        if (false == strstr($this->getContent(), (string) $needle)) {
-            return parent::beforeSave();
-        }
-        throw new LocalizedException(
-            __('Make sure that static post content does not reference the post itself.')
-        );
-    }
-
-    /**
-     * Get identities
-     *
-     * @return array
-     */
-    public function getIdentities()
-    {
-        return [self::CACHE_TAG . '_' . $this->getId(), self::CACHE_TAG . '_' . $this->getIdentifier()];
+        $this->_init(ModelBlog::class);
     }
 
     /**
@@ -98,9 +69,9 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      *
      * @return string
      */
-    public function getImgPath()
+    public function getImagePath()
     {
-        return $this->getData(self::IMG_PATH);
+        return $this->getData(self::IMAGE_PATH);
     }
 
     /**
@@ -117,7 +88,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Set ID
      *
      * @param int $id
-     * @return BlockInterface
+     * @return BlogInterface
      */
     public function setId($id)
     {
@@ -128,7 +99,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Set title
      *
      * @param string $title
-     * @return BlockInterface
+     * @return BlogInterface
      */
     public function setTitle($title)
     {
@@ -139,7 +110,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      * Set content
      *
      * @param string $content
-     * @return BlockInterface
+     * @return BlogInterface
      */
     public function setContent($content)
     {
@@ -149,19 +120,19 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * Set image
      *
-     * @param string $imgPath
-     * @return BlockInterface
+     * @param string $imagePath
+     * @return BlogInterface
      */
-    public function setImgPath($imgPath)
+    public function setImagePath($imagePath)
     {
-        return $this->setData(self::IMG_PATH, $imgPath);
+        return $this->setData(self::IMAGE_PATH, $imagePath);
     }
 
     /**
      * Set creation time
      *
      * @param string $creationTime
-     * @return BlockInterface
+     * @return BlogInterface
      */
     public function setCreationTime($creationTime)
     {

@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Block;
 
-use BVMyBlog\Blog\Model\BlockRepository;
+use BVMyBlog\Blog\Model\BlogRepository;
 use Magento\Catalog\Model\Locator\RegistryLocator;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Returns 5 latest posts
  */
-class LastPosts extends Template implements ArgumentInterface
+class LastPosts extends Template
 {
     /**
      * @var SortOrderBuilder $sortOrderBuilder
@@ -29,9 +29,9 @@ class LastPosts extends Template implements ArgumentInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var BlockRepository $blockRepository
+     * @var BlogRepository $blogRepository
      */
-    private $blockRepository;
+    private $blogRepository;
 
     /**
      * ScopeConfigInterface $scopeInterface
@@ -54,7 +54,9 @@ class LastPosts extends Template implements ArgumentInterface
      * @param RegistryLocator $registryLocator
      * @param SortOrderBuilder $sortOrderBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param BlockRepository $blockRepository
+     * @param BlogRepository $blogRepository
+     * @param Context $context
+     * @param array $data
      */
     public function __construct(
         ScopeConfigInterface $scopeInterface,
@@ -62,14 +64,17 @@ class LastPosts extends Template implements ArgumentInterface
         RegistryLocator $registryLocator,
         SortOrderBuilder $sortOrderBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        BlockRepository $blockRepository
+        BlogRepository $blogRepository,
+        Context $context,
+        array $data = []
     ) {
         $this->scopeInterface = $scopeInterface;
         $this->urlBuilder = $urlBuilder;
         $this->registryLocator = $registryLocator;
         $this->sortOrderBuilder=$sortOrderBuilder;
         $this->searchCriteriaBuilder=$searchCriteriaBuilder;
-        $this->blockRepository = $blockRepository;
+        $this->blogRepository = $blogRepository;
+        parent::__construct($context, $data);
     }
 
     /**
@@ -81,13 +86,13 @@ class LastPosts extends Template implements ArgumentInterface
      */
     public function getUrlById(int $id)
     {
-        return $this->urlBuilder->getUrl('myblog/index/index', ['id' => $id]);
+        return $this->urlBuilder->getUrl('bvmyblog_blog/index/index', ['id' => $id]);
     }
 
     /**
      * Get last posts by field created_at
      *
-     * @return mixed
+     * @return array
      */
     public function getTopBlogs()
     {
@@ -95,7 +100,7 @@ class LastPosts extends Template implements ArgumentInterface
         $this->sortOrderBuilder->setDescendingDirection();
         $this->searchCriteriaBuilder->addSortOrder($this->sortOrderBuilder->create());
         $this->searchCriteriaBuilder->setPageSize(5);
-        $searchResult = $this->blockRepository->getList(($this->searchCriteriaBuilder->create()));
+        $searchResult = $this->blogRepository->getList(($this->searchCriteriaBuilder->create()));
         return $searchResult->getItems();
     }
 
@@ -110,7 +115,6 @@ class LastPosts extends Template implements ArgumentInterface
         $types = $this->scopeInterface->getValue('catalog/blog/blog_applied_to');
         $currentProductTypes = $this->registryLocator->getProduct()->getTypeId();
         $typesArray = explode(',', $types);
-        $match = in_array($currentProductTypes, $typesArray);
-        return $match;
+        return in_array($currentProductTypes, $typesArray);
     }
 }

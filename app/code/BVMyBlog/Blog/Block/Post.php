@@ -3,40 +3,49 @@ declare(strict_types=1);
 
 namespace BVMyBlog\Blog\Block;
 
+use BVMyBlog\Blog\Model\BlogRepository;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\View\Element\Block\ArgumentInterface;
-use BVMyBlog\Blog\Model\BlockRepository;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Returns post data
  */
-class Post extends Template implements ArgumentInterface
+class Post extends Template
 {
+    /**
+     * @var DataObject $post
+     */
+    private $post;
     /**
      * @var RequestInterface $request
      */
     private $request;
 
     /**
-     * @var BlockRepository $blockRepository
+     * @var BlogRepository $blogRepository
      */
-    private $blockRepository;
+    private $blogRepository;
 
     /**
      * @inheritdoc
      *
+     * @param BlogRepository $blogRepository
      * @param RequestInterface $request
-     * @param BlockRepository $blockRepository
+     * @param Context $context
+     * @param array $data
      */
     public function __construct(
+        BlogRepository $blogRepository,
         RequestInterface $request,
-        BlockRepository $blockRepository
+        Context $context,
+        array $data = []
     ) {
+        $this->blogRepository = $blogRepository;
         $this->request = $request;
-        $this->blockRepository = $blockRepository;
+        parent::__construct($context, $data);
     }
 
     /**
@@ -58,6 +67,10 @@ class Post extends Template implements ArgumentInterface
      */
     public function getPostById($id)
     {
-        return $this->blockRepository->getById($id);
+        if (isset($this->post)) {
+            return $this->post;
+        } else {
+            return $this->blogRepository->getById($id);
+        }
     }
 }
