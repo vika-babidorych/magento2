@@ -4,15 +4,15 @@ declare(strict_types=1);
 namespace BVMyBlog\Blog\Controller\Adminhtml\Post;
 
 use BVMyBlog\Blog\Api\BlogRepositoryInterface;
+use BVMyBlog\Blog\Model\Blog;
 use BVMyBlog\Blog\Model\BlogFactory;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\Action\Action;
-use BVMyBlog\Blog\Model\Blog;
-use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Saves data from form
@@ -61,13 +61,14 @@ class Save extends Action implements HttpPostActionInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue();
+
         if ($data) {
             if (empty($data['post_id'])) {
                 $data['post_id'] = null;
             }
             /** @var Blog $post */
             $post = $this->blogFactory->create(['data' => $data]);
-            $imgPath = $data['image_path'][0]['url'];
+            $imgPath = $data['image_path'][0]['url'] ?? '';
             $data['image_path'] = $imgPath;
 
             $id = $this->getRequest()->getParam('post_id');
