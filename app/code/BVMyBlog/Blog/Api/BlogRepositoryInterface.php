@@ -9,6 +9,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Repository interface post data.
@@ -38,7 +39,7 @@ interface BlogRepositoryInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultsInterface
-     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria);
 
@@ -57,6 +58,7 @@ interface BlogRepositoryInterface
      * @param string $blogId
      * @return bool true on success
      * @throws NoSuchEntityException
+     * @throws CouldNotDeleteException
      */
     public function deleteById($blogId);
 }

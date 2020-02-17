@@ -2,7 +2,7 @@
 /** @var \BVMyBlog\Blog\Block\Post $block*/
 
 $id = $block->getBlogId();
-$data = $block->getPostById($id);
+$data = $block->getPost();
 ?>
 <div>
     <?php $post_id = $data->getId();
@@ -14,5 +14,25 @@ $data = $block->getPostById($id);
     <h4>Title:</h4><p><?= $block->escapeHtml($title) ?></p>
     <h4>Content:</h4><p><?= $block->escapeHtml($post_content) ?></p>
     <h4>Created at:</h4><p><?= $block->escapeHtml($created_at) ?></p>
-    <img src='<?= $block->escapeUrl($image_path) ?>'/>
+    <img src="<?= $block->escapeUrl($image_path) ?>"/>
+    <br/>
+    <button class="button-back-to-product"
+            data-mage-init='{"redirectUrl": {"event": "click",
+            "url": "<?= $block->escapeUrl($block->getBackUrl()) ?>"}}'
+            type="button"
+            title="Back to product"
+            id="backToProduct">
+        <span>Back to product</span>
+    </button>
 </div>
+
+<script>
+    require([
+        'jquery',
+        'redirectUrl'
+    ], function ($) {
+        'use strict';
+
+        $("#backToProduct").redirectUrl({url: "<?= $block->escapeUrl($block->getBackUrl()) ?>"});
+    });
+</script>

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace BVMyBlog\Blog\Block;
 
 use BVMyBlog\Blog\Model\BlogRepository;
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
@@ -16,13 +16,14 @@ use Magento\Framework\View\Element\Template\Context;
 class Post extends Template
 {
     /**
+     * @var RedirectInterface $redirect
+     */
+    private $redirect;
+
+    /**
      * @var DataObject $post
      */
     private $post;
-    /**
-     * @var RequestInterface $request
-     */
-    private $request;
 
     /**
      * @var BlogRepository $blogRepository
@@ -32,19 +33,19 @@ class Post extends Template
     /**
      * @inheritdoc
      *
+     * @param RedirectInterface $redirect
      * @param BlogRepository $blogRepository
-     * @param RequestInterface $request
      * @param Context $context
      * @param array $data
      */
     public function __construct(
+        RedirectInterface $redirect,
         BlogRepository $blogRepository,
-        RequestInterface $request,
         Context $context,
         array $data = []
     ) {
+        $this->redirect = $redirect;
         $this->blogRepository = $blogRepository;
-        $this->request = $request;
         parent::__construct($context, $data);
     }
 
@@ -55,22 +56,31 @@ class Post extends Template
      */
     public function getBlogId()
     {
-        return $this->request->getParam('id');
+        return $this->getRequest()->getParam('id');
     }
 
     /**
      * Returns post data by id
      *
-     * @param string $id
      * @return DataObject $result
      * @throws NoSuchEntityException
      */
-    public function getPostById($id)
+    public function getPost()
     {
-        if (isset($this->post)) {
-            return $this->post;
-        } else {
-            return $this->blogRepository->getById($id);
+        if ($this->post === null) {
+            $this->post = $this->blogRepository->getById($this->getBlogId());
         }
+
+        return $this->post;
+    }
+
+    /**
+     * Returns url
+     *
+     * @return string
+     */
+    public function getBackUrl()
+    {
+        return $this->redirect->getRedirectUrl();
     }
 }

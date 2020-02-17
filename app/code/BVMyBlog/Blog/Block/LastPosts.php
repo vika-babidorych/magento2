@@ -9,7 +9,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 
@@ -39,18 +38,12 @@ class LastPosts extends Template
     private $scopeInterface;
 
     /**
-     * UrlInterface $urlInterface
-     */
-    private $urlBuilder;
-
-    /**
      * @var RegistryLocator $registryLocator
      */
     private $registryLocator;
 
     /**
      * @param ScopeConfigInterface $scopeInterface
-     * @param UrlInterface $urlBuilder
      * @param RegistryLocator $registryLocator
      * @param SortOrderBuilder $sortOrderBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -60,7 +53,6 @@ class LastPosts extends Template
      */
     public function __construct(
         ScopeConfigInterface $scopeInterface,
-        UrlInterface $urlBuilder,
         RegistryLocator $registryLocator,
         SortOrderBuilder $sortOrderBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -69,10 +61,9 @@ class LastPosts extends Template
         array $data = []
     ) {
         $this->scopeInterface = $scopeInterface;
-        $this->urlBuilder = $urlBuilder;
         $this->registryLocator = $registryLocator;
-        $this->sortOrderBuilder=$sortOrderBuilder;
-        $this->searchCriteriaBuilder=$searchCriteriaBuilder;
+        $this->sortOrderBuilder = $sortOrderBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->blogRepository = $blogRepository;
         parent::__construct($context, $data);
     }
@@ -86,7 +77,7 @@ class LastPosts extends Template
      */
     public function getUrlById(int $id)
     {
-        return $this->urlBuilder->getUrl('bvmyblog_blog/index/index', ['id' => $id]);
+        return $this->getUrl('bvmyblog_blog/index/index', ['id' => $id]);
     }
 
     /**
@@ -113,7 +104,12 @@ class LastPosts extends Template
     public function isMatch()
     {
         $types = $this->scopeInterface->getValue('catalog/blog/blog_applied_to');
-        $currentProductTypes = $this->registryLocator->getProduct()->getTypeId();
+
+        try {
+            $currentProductTypes = $this->registryLocator->getProduct()->getTypeId();
+        } catch (NotFoundException $e) {
+            throw $e;
+        }
         $typesArray = explode(',', $types);
         return in_array($currentProductTypes, $typesArray);
     }

@@ -128,6 +128,7 @@ class BlogRepository implements BlogRepositoryInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param SearchCriteriaInterface $criteria
      * @return SearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $criteria)
     {

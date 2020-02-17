@@ -48,13 +48,15 @@ class Delete extends Action implements HttpPostActionInterface
 
     /**
      * @inheritdoc
-     *
-     * @throws NoSuchEntityException
      */
     public function execute()
     {
         $id = (int) $this->getRequest()->getParam('id');
-        $post = $this->blogRepository->getById($id);
+        try {
+            $post = $this->blogRepository->getById($id);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addError(__('Unable to process, post with such ID is missing.'));
+        }
 
         if (!$post->getId()) {
             $this->messageManager->addError(__('Unable to process, there is no post with this ID.'));
