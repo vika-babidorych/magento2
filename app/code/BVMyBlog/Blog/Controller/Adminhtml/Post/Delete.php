@@ -58,7 +58,7 @@ class Delete extends Action implements HttpPostActionInterface
             $this->messageManager->addError(__('Unable to process, post with such ID is missing.'));
         }
 
-        if (!$post->getId()) {
+        if (!$post->getPostId()) {
             $this->messageManager->addError(__('Unable to process, there is no post with this ID.'));
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('*/*/', ['_current' => true]);

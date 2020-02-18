@@ -19,37 +19,37 @@ interface BlogInterface
     /**
      * Get ID
      *
-     * @return int|null
+     * @return int
      */
-    public function getId();
+    public function getPostId() : int;
 
     /**
      * Get title
      *
-     * @return string|null
+     * @return string
      */
-    public function getTitle();
+    public function getTitle() : string;
 
     /**
      * Get content
      *
-     * @return string|null
+     * @return string
      */
-    public function getContent();
+    public function getContent() : string;
 
     /**
      * Get image path
      *
-     * @return string|null
+     * @return string
      */
-    public function getImagePath();
+    public function getImagePath() : string;
 
     /**
      * Get creation time
      *
-     * @return string|null
+     * @return string
      */
-    public function getCreationTime();
+    public function getCreationTime() : string;
 
     /**
      * Set id
@@ -57,7 +57,7 @@ interface BlogInterface
      * @param string $id
      * @return BlogInterface
      */
-    public function setId($id);
+    public function setPostId($id) : BlogInterface;
 
     /**
      * Set title
@@ -65,7 +65,7 @@ interface BlogInterface
      * @param string $title
      * @return BlogInterface
      */
-    public function setTitle($title);
+    public function setTitle($title) : BlogInterface;
 
     /**
      * Set content
@@ -73,7 +73,7 @@ interface BlogInterface
      * @param string $content
      * @return BlogInterface
      */
-    public function setContent($content);
+    public function setContent($content) : BlogInterface;
 
     /**
      * Set image path
@@ -81,7 +81,7 @@ interface BlogInterface
      * @param string $imagePath
      * @return BlogInterface
      */
-    public function setImagePath($imagePath);
+    public function setImagePath($imagePath) : BlogInterface;
 
     /**
      * Set creation time
@@ -89,5 +89,5 @@ interface BlogInterface
      * @param string $creationTime
      * @return BlogInterface
      */
-    public function setCreationTime($creationTime);
+    public function setCreationTime($creationTime) : BlogInterface;
 }

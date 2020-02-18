@@ -23,7 +23,7 @@ interface BlogRepositoryInterface
      * @return BlogInterface
      * @throws CouldNotSaveException
      */
-    public function save(BlogInterface $blog);
+    public function save(BlogInterface $blog) : BlogInterface;
 
     /**
      * Retrieve post.
@@ -32,7 +32,7 @@ interface BlogRepositoryInterface
      * @return BlogInterface
      * @throws NoSuchEntityException
      */
-    public function getById($blogId);
+    public function getById($blogId) : BlogInterface;
 
     /**
      * Retrieve posts matching the specified criteria.
@@ -41,24 +41,24 @@ interface BlogRepositoryInterface
      * @return SearchResultsInterface
      * @throws LocalizedException
      */
-    public function getList(SearchCriteriaInterface $searchCriteria);
+    public function getList(SearchCriteriaInterface $searchCriteria) : SearchResultsInterface;
 
     /**
      * Delete post.
      *
      * @param BlogInterface $blog
-     * @return bool true on success
+     * @return BlogInterface
      * @throws CouldNotDeleteException
      */
-    public function delete(BlogInterface $blog);
+    public function delete(BlogInterface $blog) : BlogInterface;
 
     /**
      * Delete post by ID.
      *
      * @param string $blogId
-     * @return bool true on success
+     * @return BlogInterface
      * @throws NoSuchEntityException
      * @throws CouldNotDeleteException
      */
-    public function deleteById($blogId);
+    public function deleteById($blogId) : BlogInterface;
 }

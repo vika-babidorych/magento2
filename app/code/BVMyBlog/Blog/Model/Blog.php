@@ -39,9 +39,9 @@ class Blog extends AbstractModel implements BlogInterface
      *
      * @return int
      */
-    public function getId()
+    public function getPostId() : int
     {
-        return $this->getData(self::POST_ID);
+        return (int)$this->_getData(self::POST_ID);
     }
 
     /**
@@ -49,9 +49,9 @@ class Blog extends AbstractModel implements BlogInterface
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle() : string
     {
-        return $this->getData(self::TITLE);
+        return $this->_getData(self::TITLE);
     }
 
     /**
@@ -59,9 +59,9 @@ class Blog extends AbstractModel implements BlogInterface
      *
      * @return string
      */
-    public function getContent()
+    public function getContent() : string
     {
-        return $this->getData(self::POST_CONTENT);
+        return $this->_getData(self::POST_CONTENT);
     }
 
     /**
@@ -69,9 +69,9 @@ class Blog extends AbstractModel implements BlogInterface
      *
      * @return string
      */
-    public function getImagePath()
+    public function getImagePath() : string
     {
-        return $this->getData(self::IMAGE_PATH);
+        return $this->_getData(self::IMAGE_PATH);
     }
 
     /**
@@ -79,9 +79,9 @@ class Blog extends AbstractModel implements BlogInterface
      *
      * @return string
      */
-    public function getCreationTime()
+    public function getCreationTime() : string
     {
-        return $this->getData(self::CREATED_AT);
+        return $this->_getData(self::CREATED_AT);
     }
 
     /**
@@ -90,7 +90,7 @@ class Blog extends AbstractModel implements BlogInterface
      * @param int $id
      * @return BlogInterface
      */
-    public function setId($id)
+    public function setPostId($id) : BlogInterface
     {
         return $this->setData(self::POST_ID, $id);
     }
@@ -101,7 +101,7 @@ class Blog extends AbstractModel implements BlogInterface
      * @param string $title
      * @return BlogInterface
      */
-    public function setTitle($title)
+    public function setTitle($title) : BlogInterface
     {
         return $this->setData(self::TITLE, $title);
     }
@@ -112,7 +112,7 @@ class Blog extends AbstractModel implements BlogInterface
      * @param string $content
      * @return BlogInterface
      */
-    public function setContent($content)
+    public function setContent($content) : BlogInterface
     {
         return $this->setData(self::POST_CONTENT, $content);
     }
@@ -123,7 +123,7 @@ class Blog extends AbstractModel implements BlogInterface
      * @param string $imagePath
      * @return BlogInterface
      */
-    public function setImagePath($imagePath)
+    public function setImagePath($imagePath) : BlogInterface
     {
         return $this->setData(self::IMAGE_PATH, $imagePath);
     }
@@ -134,7 +134,7 @@ class Blog extends AbstractModel implements BlogInterface
      * @param string $creationTime
      * @return BlogInterface
      */
-    public function setCreationTime($creationTime)
+    public function setCreationTime($creationTime) : BlogInterface
     {
         return $this->setData(self::CREATED_AT, $creationTime);
     }

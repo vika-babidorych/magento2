@@ -5,11 +5,11 @@ namespace BVMyBlog\Blog\Model;
 
 use BVMyBlog\Blog\Model\ResourceModel\Blog\CollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
- * Model DataProvider
+ * Blog form ui Data Provider
  */
 class DataProvider extends AbstractDataProvider
 {
@@ -32,6 +32,7 @@ class DataProvider extends AbstractDataProvider
      * @var SearchCriteriaBuilder $searchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
     /**
      * @var BlogRepository $blogRepository
      */
@@ -88,7 +89,7 @@ class DataProvider extends AbstractDataProvider
                 ]
             ];
             $recordData['image_path'] = $recordImg;
-            $this->loadedData[$record->getId()] = $recordData;
+            $this->loadedData[$record->getPostId()] = $recordData;
         }
         return $this->loadedData;
     }

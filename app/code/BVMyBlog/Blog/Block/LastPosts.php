@@ -75,7 +75,7 @@ class LastPosts extends Template
      *
      * @return string
      */
-    public function getUrlById(int $id)
+    public function getUrlById(int $id) : string
     {
         return $this->getUrl('bvmyblog_blog/index/index', ['id' => $id]);
     }
@@ -85,7 +85,7 @@ class LastPosts extends Template
      *
      * @return array
      */
-    public function getTopBlogs()
+    public function getTopBlogs() : array
     {
         $this->sortOrderBuilder->setField('created_at');
         $this->sortOrderBuilder->setDescendingDirection();
@@ -99,16 +99,15 @@ class LastPosts extends Template
      * Find currentProductTypes in typesArray
      *
      * @return bool
-     * @throws NotFoundException
      */
-    public function isMatch()
+    public function isMatch() : bool
     {
         $types = $this->scopeInterface->getValue('catalog/blog/blog_applied_to');
 
         try {
             $currentProductTypes = $this->registryLocator->getProduct()->getTypeId();
         } catch (NotFoundException $e) {
-            throw $e;
+            $this->_logger->warning($e);
         }
         $typesArray = explode(',', $types);
         return in_array($currentProductTypes, $typesArray);

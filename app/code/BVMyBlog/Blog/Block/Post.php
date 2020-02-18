@@ -31,8 +31,6 @@ class Post extends Template
     private $blogRepository;
 
     /**
-     * @inheritdoc
-     *
      * @param RedirectInterface $redirect
      * @param BlogRepository $blogRepository
      * @param Context $context
@@ -52,11 +50,11 @@ class Post extends Template
     /**
      * Returns post id
      *
-     * @return mixed
+     * @return int
      */
-    public function getBlogId()
+    public function getBlogId() : int
     {
-        return $this->getRequest()->getParam('id');
+        return (int)$this->getRequest()->getParam('id');
     }
 
     /**
@@ -65,7 +63,7 @@ class Post extends Template
      * @return DataObject $result
      * @throws NoSuchEntityException
      */
-    public function getPost()
+    public function getPost() : DataObject
     {
         if ($this->post === null) {
             $this->post = $this->blogRepository->getById($this->getBlogId());
@@ -79,7 +77,7 @@ class Post extends Template
      *
      * @return string
      */
-    public function getBackUrl()
+    public function getBackUrl() : string
     {
         return $this->redirect->getRedirectUrl();
     }

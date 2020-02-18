@@ -11,7 +11,6 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -71,7 +70,7 @@ class Save extends Action implements HttpPostActionInterface
             $imgPath = $data['image_path'][0]['url'] ?? '';
             $data['image_path'] = $imgPath;
 
-            $id = $this->getRequest()->getParam('post_id');
+            $id = $this->getRequest()->getParam('id');
             if ($id) {
                 try {
                     $post = $this->blogRepository->getById($id);
@@ -80,7 +79,7 @@ class Save extends Action implements HttpPostActionInterface
                     return $resultRedirect->setPath('*/*/');
                 }
             }
-            $post->setData($data);
+            $post->addData($data);
             try {
                 $this->blogRepository->save($post);
                 $this->messageManager->addSuccessMessage(__('You saved the post.'));
@@ -92,7 +91,7 @@ class Save extends Action implements HttpPostActionInterface
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the post.'));
             }
             $this->dataPersistor->set('bvmyblog_blog_post', $data);
-            return $resultRedirect->setPath('*/*/edit', ['post_id' => $id]);
+            return $resultRedirect->setPath('*/*/');
         }
         return $resultRedirect->setPath('*/*/');
     }
@@ -104,24 +103,15 @@ class Save extends Action implements HttpPostActionInterface
      * @param array $data
      * @param ResultInterface $resultRedirect
      * @return ResultInterface $resultRedirect
-     * @throws CouldNotSaveException
      */
-    private function processBlockReturn($post, $data, $resultRedirect)
+    private function processBlockReturn($post, $data, $resultRedirect) : ResultInterface
     {
         $redirect = $data['back'] ?? 'close';
 
         if ($redirect === 'continue') {
-            $resultRedirect->setPath('*/*/', ['post_id' => $post->getId()]);
+            $resultRedirect->setPath('*/*/', ['post_id' => $post->getPostId()]);
         } elseif ($redirect === 'close') {
             $resultRedirect->setPath('*/*/');
-        } elseif ($redirect === 'duplicate') {
-            $duplicateModel = $this->blogFactory->create(['data' => $data]);
-            $duplicateModel->setId(null);
-            $duplicateModel = $this->blogRepository->save($duplicateModel);
-            $id = $duplicateModel->getId();
-            $this->messageManager->addSuccessMessage(__('You duplicated the post.'));
-            $this->dataPersistor->set('bvmyblog_blog_post', $data);
-            $resultRedirect->setPath('*/*/', ['post_id' => $id]);
         }
         return $resultRedirect;
     }
