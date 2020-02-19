@@ -6,23 +6,23 @@
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="bvmyblog_blog_post_listing_data_source"
-                      xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Post\Collection</item>
+                      xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Blog\Collection</item>
             </argument>
         </arguments>
     </type>
 
     <virtualType name="BlogGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
-            <argument name="collection" xsi:type="object" shared="false">BVMyBlog\Blog\Model\ResourceModel\Post\Collection</argument>
+            <argument name="collection" xsi:type="object" shared="false">BVMyBlog\Blog\Model\ResourceModel\Blog\Collection</argument>
             <argument name="filterPool" xsi:type="object" shared="false">BlogGridDataProvider</argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="BVMyBlog\Blog\Model\ResourceModel\Post\Collection"
+    <virtualType name="BVMyBlog\Blog\Model\ResourceModel\Blog\Collection"
                  type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">bvmyblog_blog_post</argument>
-            <argument name="resourceModel" xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Post</argument>
+            <argument name="resourceModel" xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Blog</argument>
         </arguments>
     </virtualType>
 

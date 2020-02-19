@@ -11,7 +11,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Saves data from form
@@ -39,7 +40,7 @@ class Save extends Action implements HttpPostActionInterface
      * @param Context $context
      * @param DataPersistorInterface $dataPersistor
      * @param BlogFactory $blogFactory
-     * @param BlogRepositoryInterface|null $blogRepository
+     * @param BlogRepositoryInterface $blogRepository
      */
     public function __construct(
         Context $context,
@@ -74,7 +75,7 @@ class Save extends Action implements HttpPostActionInterface
             if ($id) {
                 try {
                     $post = $this->blogRepository->getById($id);
-                } catch (LocalizedException $e) {
+                } catch (NoSuchEntityException $e) {
                     $this->messageManager->addErrorMessage(__('This post no longer exists.'));
                     return $resultRedirect->setPath('*/*/');
                 }
@@ -85,7 +86,7 @@ class Save extends Action implements HttpPostActionInterface
                 $this->messageManager->addSuccessMessage(__('You saved the post.'));
                 $this->dataPersistor->clear('bvmyblog_blog_post');
                 return $this->processBlockReturn($post, $data, $resultRedirect);
-            } catch (LocalizedException $e) {
+            } catch (CouldNotSaveException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the post.'));
@@ -108,7 +109,8 @@ class Save extends Action implements HttpPostActionInterface
     {
         $redirect = $data['back'] ?? 'close';
 
-        if ($redirect === 'continue') {
+        $id = $post->getPostId();
+        if ($redirect === 'continue' && isset($id)) {
             $resultRedirect->setPath('*/*/', ['post_id' => $post->getPostId()]);
         } elseif ($redirect === 'close') {
             $resultRedirect->setPath('*/*/');

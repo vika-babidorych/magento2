@@ -31,15 +31,15 @@ class Post extends Template
     private $blogRepository;
 
     /**
+     * @param Context $context
      * @param RedirectInterface $redirect
      * @param BlogRepository $blogRepository
-     * @param Context $context
      * @param array $data
      */
     public function __construct(
+        Context $context,
         RedirectInterface $redirect,
         BlogRepository $blogRepository,
-        Context $context,
         array $data = []
     ) {
         $this->redirect = $redirect;
@@ -61,12 +61,15 @@ class Post extends Template
      * Returns post data by id
      *
      * @return DataObject $result
-     * @throws NoSuchEntityException
      */
     public function getPost() : DataObject
     {
         if ($this->post === null) {
-            $this->post = $this->blogRepository->getById($this->getBlogId());
+            try {
+                $this->post = $this->blogRepository->getById($this->getBlogId());
+            } catch (NoSuchEntityException $e) {
+                $this->_logger->warning($e);
+            }
         }
 
         return $this->post;

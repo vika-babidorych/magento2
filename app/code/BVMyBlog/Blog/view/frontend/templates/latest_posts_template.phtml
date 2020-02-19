@@ -4,9 +4,9 @@
 $data = $block->getTopBlogs();
 $match = $block->isMatch();
 ?>
-<div>
+<div class="blog-div-head">
     <?php if ($match): ?>
-    <h3><?= $block->escapeHtml(__('Last 5 posts:')) ?></h3>
+    <h2><?= $block->escapeHtml(__('Last 5 posts:')) ?></h2>
         <ul>
             <?php foreach ($data as $value):
                 $item = $value->getTitle();

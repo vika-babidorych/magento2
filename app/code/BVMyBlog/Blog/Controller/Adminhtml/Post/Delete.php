@@ -34,7 +34,7 @@ class Delete extends Action implements HttpPostActionInterface
      *
      * @param Context $context
      * @param PageFactory $resultPageFactory
-     * @param BlogRepositoryInterface|null $blogRepository
+     * @param BlogRepositoryInterface $blogRepository
      */
     public function __construct(
         Context $context,
@@ -51,14 +51,17 @@ class Delete extends Action implements HttpPostActionInterface
      */
     public function execute()
     {
-        $id = (int) $this->getRequest()->getParam('id');
-        try {
-            $post = $this->blogRepository->getById($id);
-        } catch (NoSuchEntityException $e) {
-            $this->messageManager->addError(__('Unable to process, post with such ID is missing.'));
+        $id = $this->getRequest()->getParam('id');
+
+        if (is_numeric($id)) {
+            try {
+                $post = $this->blogRepository->getById($id);
+            } catch (NoSuchEntityException $e) {
+                $this->messageManager->addError(__('Unable to process, post with such ID is missing.'));
+            }
         }
 
-        if (!$post->getPostId()) {
+        if ($post !== null && !$post->getPostId()) {
             $this->messageManager->addError(__('Unable to process, there is no post with this ID.'));
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('*/*/', ['_current' => true]);

@@ -35,13 +35,27 @@ class Blog extends AbstractModel implements BlogInterface
     }
 
     /**
+     * Function getIdentities
+     */
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
      * Retrieve post id
      *
      * @return int
      */
     public function getPostId() : int
     {
-        return (int)$this->_getData(self::POST_ID);
+        $id = $this->_getData(self::POST_ID);
+
+        if ($id !== null) {
+            $id = (int)$id;
+        }
+
+        return $id;
     }
 
     /**
@@ -67,7 +81,7 @@ class Blog extends AbstractModel implements BlogInterface
     /**
      * Retrieve post image
      *
-     * @return string
+     * @return string|null
      */
     public function getImagePath() : string
     {

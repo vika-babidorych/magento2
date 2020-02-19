@@ -11,7 +11,7 @@
         </referenceBlock>
         <referenceContainer name="content">
             <container htmlTag="div" htmlId="description-container">
-                <block class="BVMyBlog\Blog\Block\Post" name="bvmyblog_blog.post" template="BVMyBlog_Blog::postTmpl.phtml"/>
+                <block class="BVMyBlog\Blog\Block\Post" name="bvmyblog_blog.post" template="BVMyBlog_Blog::post.phtml"/>
             </container>
         </referenceContainer>
     </body>

@@ -43,21 +43,21 @@ class LastPosts extends Template
     private $registryLocator;
 
     /**
+     * @param Context $context
      * @param ScopeConfigInterface $scopeInterface
      * @param RegistryLocator $registryLocator
      * @param SortOrderBuilder $sortOrderBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param BlogRepository $blogRepository
-     * @param Context $context
      * @param array $data
      */
     public function __construct(
+        Context $context,
         ScopeConfigInterface $scopeInterface,
         RegistryLocator $registryLocator,
         SortOrderBuilder $sortOrderBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         BlogRepository $blogRepository,
-        Context $context,
         array $data = []
     ) {
         $this->scopeInterface = $scopeInterface;
@@ -107,7 +107,7 @@ class LastPosts extends Template
         try {
             $currentProductTypes = $this->registryLocator->getProduct()->getTypeId();
         } catch (NotFoundException $e) {
-            $this->_logger->warning($e);
+            return false;
         }
         $typesArray = explode(',', $types);
         return in_array($currentProductTypes, $typesArray);

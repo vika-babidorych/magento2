@@ -19,11 +19,6 @@ class DataProvider extends AbstractDataProvider
     private $pathToFile;
 
     /**
-     * @var ResourceModel\Blog\Collection $collection
-     */
-    protected $collection;
-
-    /**
      * @var array $loadedData
      */
     private $loadedData;
@@ -83,7 +78,8 @@ class DataProvider extends AbstractDataProvider
             $recordData = $record->getData();
             $pathParts = $this->pathToFile->getPathInfo($recordData['image_path']);
             $recordImg = [
-                ['type'=>'image',
+                [
+                    'type' => 'image',
                     'name' => $pathParts['filename'],
                     'url' => $recordData['image_path']
                 ]
