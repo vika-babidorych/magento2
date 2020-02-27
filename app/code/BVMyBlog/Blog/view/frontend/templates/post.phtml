@@ -1,0 +1,13 @@
+<?php
+/** @var \BVMyBlog\Blog\Block\Post $block*/
+
+$data = $block->getPost();
+?>
+<div class="blog-div-head">
+    <span>Id:</span><p><?= $block->escapeHtml($data->getPostId()) ?></p>
+    <span>Title:</span><p><?= $block->escapeHtml($data->getTitle()) ?></p>
+    <span>Content:</span><p><?= $block->escapeHtml($data->getContent()) ?></p>
+    <span>Created at:</span><p><?= $block->escapeHtml($data->getCreationTime()) ?></p>
+    <img width="1024" height="512" alt="<?= $block->escapeHtmlAttr($data->getTitle()) ?>"
+         src="<?= $block->escapeUrl($data->getImagePath()) ?>"/>
+</div>

@@ -1,0 +1,82 @@
+<?php
+declare(strict_types=1);
+
+namespace BVMyBlog\Blog\Block\Adminhtml\Block\Edit;
+
+use Magento\Cms\Block\Adminhtml\Block\Edit\GenericButton;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Ui\Component\Control\Container;
+
+/**
+ * Submit save data
+ */
+class SaveButton extends GenericButton implements ButtonProviderInterface
+{
+    /**
+     * Get ButtonData
+     *
+     * @return array
+     */
+    public function getButtonData()
+    {
+        return [
+            'label' => __('Save'),
+            'class' => 'save primary',
+            'data_attribute' => [
+                'mage-init' => [
+                    'buttonAdapter' => [
+                        'actions' => [
+                            [
+                                'targetName' => 'bvmyblog_blog_form.bvmyblog_blog_form',
+                                'actionName' => 'save',
+                                'params' => [
+                                    true,
+                                    [
+                                        'back' => 'continue'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'class_name' => Container::SPLIT_BUTTON,
+            'options' => $this->getOptions(),
+        ];
+    }
+
+    /**
+     * Retrieve options
+     *
+     * @return array
+     */
+    private function getOptions()
+    {
+        $options = [
+            [
+                'id_hard' => 'save_and_close',
+                'label' => __('Save & Close'),
+                'data_attribute' => [
+                    'mage-init' => [
+                        'buttonAdapter' => [
+                            'actions' => [
+                                [
+                                    'targetName' => 'bvmyblog_blog_form.bvmyblog_blog_form',
+                                    'actionName' => 'save',
+                                    'params' => [
+                                        true,
+                                        [
+                                            'back' => 'close'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        return $options;
+    }
+}

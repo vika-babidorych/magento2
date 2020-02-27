@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+<menu>
+    <add id="BVMyBlog_Blog::blog" title="My Blog" module="BVMyBlog_Blog" sortOrder="51" resource="BVMyBlog_Blog::blog"/>
+    <add id="BVMyBlog_Blog::post" title="Manage Posts" module="BVMyBlog_Blog" sortOrder="10" action="bvmyblog_blog/post" resource="BVMyBlog_Blog::post" parent="BVMyBlog_Blog::blog"/>
+    <add id="BVMyBlog_Blog::blog_configuration" title="Configuration Blog" module="BVMyBlog_Blog" sortOrder="99" parent="BVMyBlog_Blog::blog" action="adminhtml/system_config/edit/section/catalog" resource="Magento_Catalog::config_catalog"/>
+</menu>
+</config>

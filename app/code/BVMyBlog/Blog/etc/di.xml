@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="bvmyblog_blog_post_listing_data_source"
+                      xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Blog\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="BlogGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">BVMyBlog\Blog\Model\ResourceModel\Blog\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">BlogGridDataProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="BVMyBlog\Blog\Model\ResourceModel\Blog\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">bvmyblog_blog_post</argument>
+            <argument name="resourceModel" xsi:type="string">BVMyBlog\Blog\Model\ResourceModel\Blog</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">BlogImageUploader</argument>
+        </arguments>
+    </type>
+    <virtualType name="BlogImageUploader" type="Magento\Catalog\Model\ImageUploader">
+        <arguments>
+            <argument name="baseTmpPath" xsi:type="string">blog/tmp</argument>
+            <argument name="basePath" xsi:type="string">blog</argument>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="jpg" xsi:type="string">jpg</item>
+                <item name="jpeg" xsi:type="string">jpeg</item>
+                <item name="gif" xsi:type="string">gif</item>
+                <item name="png" xsi:type="string">png</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="BVMyBlog\Blog\Api\Data\BlogInterface" xsi:type="string">BVMyBlog\Blog\Api\BlogRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="BVMyBlog\Blog\Model\BlockRepository">
+        <arguments>
+            <argument name="collectionProcessor"
+                      xsi:type="object">BVMyBlog\Blog\Model\Api\SearchCriteria\BlogCollectionProcessor
+            </argument>
+        </arguments>
+    </type>
+
+
+    <preference for="BVMyBlog\Blog\Api\BlogRepositoryInterface"
+                type="BVMyBlog\Blog\Model\BlogRepository" />
+    <preference for="BVMyBlog\Blog\Api\Data\BlogInterface"
+                type="BVMyBlog\Blog\Model\Blog" />
+    <preference for="Magento\Framework\Api\SearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+</config>
