@@ -5,9 +5,6 @@
             <action method="setPageTitle">
                 <argument name="pageTitle" translate="true" xsi:type="string">Post</argument>
             </action>
-            <arguments>
-                <argument name="css_class" xsi:type="string">cms-content-important</argument>
-            </arguments>
         </referenceBlock>
         <referenceContainer name="content">
             <container htmlTag="div" htmlId="description-container">

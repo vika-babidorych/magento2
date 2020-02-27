@@ -45,17 +45,11 @@ class Blog extends AbstractModel implements BlogInterface
     /**
      * Retrieve post id
      *
-     * @return int
+     * @return int|null
      */
-    public function getPostId() : int
+    public function getPostId()
     {
-        $id = $this->_getData(self::POST_ID);
-
-        if ($id !== null) {
-            $id = (int)$id;
-        }
-
-        return $id;
+        return $this->_getData(self::POST_ID) !== null ? (int)$this->_getData(self::POST_ID) : null;
     }
 
     /**

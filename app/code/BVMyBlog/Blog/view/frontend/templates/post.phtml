@@ -1,7 +1,6 @@
 <?php
 /** @var \BVMyBlog\Blog\Block\Post $block*/
 
-$id = $block->getBlogId();
 $data = $block->getPost();
 ?>
 <div class="blog-div-head">
@@ -9,15 +8,6 @@ $data = $block->getPost();
     <span>Title:</span><p><?= $block->escapeHtml($data->getTitle()) ?></p>
     <span>Content:</span><p><?= $block->escapeHtml($data->getContent()) ?></p>
     <span>Created at:</span><p><?= $block->escapeHtml($data->getCreationTime()) ?></p>
-    <img width="1024" height="512" alt="<?= $block->escapeHtml($data->getTitle()) ?>"
+    <img width="1024" height="512" alt="<?= $block->escapeHtmlAttr($data->getTitle()) ?>"
          src="<?= $block->escapeUrl($data->getImagePath()) ?>"/>
-    <br/>
-    <button class="blog-back-url"
-            data-mage-init='{"blogBackUrl":{"redirectUrl": {"event": "click",
-            "url": "<?= $block->escapeUrl($block->getBackUrl()) ?>"}}}'
-            type="button"
-            title="Back to product"
-            id="backToProduct">
-        <span>Back to product</span>
-    </button>
 </div>

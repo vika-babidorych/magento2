@@ -4,16 +4,14 @@
 $data = $block->getTopBlogs();
 $match = $block->isMatch();
 ?>
-<div class="blog-div-head">
-    <?php if ($match): ?>
-    <h2><?= $block->escapeHtml(__('Last 5 posts:')) ?></h2>
+<?php if ($match): ?>
+    <div class="blog-div-head">
+        <h2><?= $block->escapeHtml(__('Last 5 posts:')) ?></h2>
         <ul>
-            <?php foreach ($data as $value):
-                $item = $value->getTitle();
-                $id = $value->getPostId();?>
-                <li><a href='<?= $block->escapeUrl($block->getUrlById($id))?>'>
-                        <?= $block->escapeHtml($item) ?></a></li>
+            <?php foreach ($data as $value):?>
+                <li><a href='<?= $block->escapeUrl($block->getUrlById($value->getPostId()))?>'>
+                        <?= $block->escapeHtml($value->getTitle()) ?></a></li>
             <?php endforeach; ?>
         </ul>
-    <?php endif; ?>
-</div>
+    </div>
+<?php endif; ?>

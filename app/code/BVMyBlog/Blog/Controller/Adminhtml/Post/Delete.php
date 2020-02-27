@@ -53,27 +53,19 @@ class Delete extends Action implements HttpPostActionInterface
     {
         $id = $this->getRequest()->getParam('id');
 
-        if (is_numeric($id)) {
-            try {
-                $post = $this->blogRepository->getById($id);
-            } catch (NoSuchEntityException $e) {
-                $this->messageManager->addError(__('Unable to process, post with such ID is missing.'));
-            }
-        }
-
-        if ($post !== null && !$post->getPostId()) {
-            $this->messageManager->addError(__('Unable to process, there is no post with this ID.'));
+        if (!is_numeric($id) || $id <= 0) {
+            $this->messageManager->addError(__('Please specify correct post ID to delete.'));
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('*/*/', ['_current' => true]);
         }
 
         try {
-            $this->blogRepository->delete($post);
+            $this->blogRepository->deleteById($id);
             $this->messageManager->addSuccess(__('Your post has been deleted!'));
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addSuccess(__('Post no longer exist'));
         } catch (CouldNotDeleteException $e) {
-            $this->messageManager->addError(__('Error while trying to delete post'));
-            $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath('*/*/', ['_current' => true]);
+            $this->messageManager->addSuccess(__('Your post has been deleted!'));
         }
 
         $resultRedirect = $this->resultRedirectFactory->create();

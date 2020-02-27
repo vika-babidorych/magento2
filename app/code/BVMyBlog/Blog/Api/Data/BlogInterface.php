@@ -19,9 +19,9 @@ interface BlogInterface
     /**
      * Get ID
      *
-     * @return int
+     * @return int|null
      */
-    public function getPostId() : int;
+    public function getPostId();
 
     /**
      * Get title
@@ -54,7 +54,7 @@ interface BlogInterface
     /**
      * Set id
      *
-     * @param string $id
+     * @param int $id
      * @return BlogInterface
      */
     public function setPostId($id) : BlogInterface;

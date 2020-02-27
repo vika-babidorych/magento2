@@ -58,7 +58,7 @@ class DataProvider extends AbstractDataProvider
         $this->pathToFile = $pathToFile;
         $this->collection = $blogCollectionFactory->create();
         $this->blogRepository = $blogRepository;
-        $this->searchCriteriaBuilder=$searchCriteriaBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 

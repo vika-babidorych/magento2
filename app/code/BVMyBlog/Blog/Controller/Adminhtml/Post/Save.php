@@ -63,15 +63,15 @@ class Save extends Action implements HttpPostActionInterface
         $data = $this->getRequest()->getPostValue();
 
         if ($data) {
-            if (empty($data['post_id'])) {
-                $data['post_id'] = null;
+            $id = $this->getRequest()->getParam('id');
+            if (empty($data)) {
+                $this->messageManager->addErrorMessage(__('Please specify valid data.'));
+                return $resultRedirect->setPath('*/*/edit', ['post_id' => $id]);
             }
-            /** @var Blog $post */
-            $post = $this->blogFactory->create(['data' => $data]);
+
             $imgPath = $data['image_path'][0]['url'] ?? '';
             $data['image_path'] = $imgPath;
 
-            $id = $this->getRequest()->getParam('id');
             if ($id) {
                 try {
                     $post = $this->blogRepository->getById($id);
@@ -79,8 +79,11 @@ class Save extends Action implements HttpPostActionInterface
                     $this->messageManager->addErrorMessage(__('This post no longer exists.'));
                     return $resultRedirect->setPath('*/*/');
                 }
+                $post->addData($data);
+            } else {
+                $post = $this->blogFactory->create(['data' => $data]);
             }
-            $post->addData($data);
+
             try {
                 $this->blogRepository->save($post);
                 $this->messageManager->addSuccessMessage(__('You saved the post.'));
@@ -88,8 +91,6 @@ class Save extends Action implements HttpPostActionInterface
                 return $this->processBlockReturn($post, $data, $resultRedirect);
             } catch (CouldNotSaveException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the post.'));
             }
             $this->dataPersistor->set('bvmyblog_blog_post', $data);
             return $resultRedirect->setPath('*/*/');
@@ -110,8 +111,8 @@ class Save extends Action implements HttpPostActionInterface
         $redirect = $data['back'] ?? 'close';
 
         $id = $post->getPostId();
-        if ($redirect === 'continue' && isset($id)) {
-            $resultRedirect->setPath('*/*/', ['post_id' => $post->getPostId()]);
+        if ($redirect === 'continue' && isset($id) && is_numeric($id)) {
+            $resultRedirect->setPath('*/*/', ['post_id' => $id]);
         } elseif ($redirect === 'close') {
             $resultRedirect->setPath('*/*/');
         }
