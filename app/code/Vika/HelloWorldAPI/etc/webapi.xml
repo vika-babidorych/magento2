@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/helloworldapi/:id" method="GET">
+        <service class="Vika\HelloWorldAPI\Api\HelloWorldAPIRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Vika_HelloWorldAPI::helloworld"/>
+        </resources>
+    </route>
+    <route url="/V1/helloworldapi" method="GET">
+        <service class="Vika\HelloWorldAPI\Api\HelloWorldAPIRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Vika_HelloWorldAPI::helloworld"/>
+        </resources>
+    </route>
+    <route url="/V1/helloworldapi" method="POST">
+        <service class="Vika\HelloWorldAPI\Api\HelloWorldAPIRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Vika_HelloWorldAPI::helloworld"/>
+        </resources>
+    </route>
+    <route url="/V1/helloworldapi/:id" method="PUT">
+        <service class="Vika\HelloWorldAPI\Api\HelloWorldAPIRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Vika_HelloWorldAPI::helloworld"/>
+        </resources>
+    </route>
+</routes>
