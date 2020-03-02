@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Vika\HelloWorldStorefrontUi\Block\Index">
+        <plugin name="helloWorldPlugin" type="Vika\HelloWorldPlugin\Plugin\HelloWorldPlugin"/>
+    </type>
+    <preference for="Vika\HelloWorldAPI\Api\HelloWorldAPIRepositoryInterface"
+                type="Vika\HelloWorld\Model\HelloWorldRepository" />
+    <preference for="Vika\HelloWorldAPI\Api\Data\HelloWorldAPIInterface"
+                type="Vika\HelloWorld\Model\HelloWorld" />
+    <preference for="Magento\Framework\Api\SearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+</config>
